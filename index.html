@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>红色文化传承 - 红色足迹</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- 引入jQuery库，用于简化DOM操作和事件处理 -->
+    <script src="js/jquery-3.6.0.js"></script>
+    <style>
+        /* ===================== 全局样式重置 ===================== */
+        * {
+            margin: 0; /* 清除默认外边距 */
+            padding: 0; /* 清除默认内边距 */
+            box-sizing: border-box; /* 盒模型：宽高包含内边距和边框 */
+            font-family: "微软雅黑", sans-serif; /* 设置默认字体 */
+        }
+        
+        /* 页面整体背景色 */
+        body {
+            background-color: #f5f5f5; /* 浅灰色背景，提升页面质感 */
+        }
+        
+        /* ===================== 顶部横幅样式 ===================== */
+        .top-banner {
+            background-color: #c00; /* 红色主色调，契合红色文化主题 */
+            color: #fff; /* 文字白色 */
+            padding: 10px 20px; /* 内边距 */
+        }
+		 
+        /* 搜索框容器：右对齐 */
+        .banner-right{
+            display: flex; /* 弹性布局 */
+            justify-content:right; /* 内容右对齐 */
+        }
+        
+        /* 横幅核心标语文字样式 */
+        .banner-text {
+            font-size: 18px;
+            font-weight: bold; /* 加粗突出 */
+        }
+        
+        /* 搜索输入框样式 */
+        .search-input {
+            width: 250px; /* 输入框宽度 */
+            height: 30px; /* 输入框高度 */
+            padding: 0 10px; /* 左右内边距，避免文字贴边 */
+            border: none; /* 去掉默认边框 */
+            border-radius: 3px 0 0 3px; /* 左圆角，与按钮拼接 */
+            outline: none; /* 去掉聚焦时的默认边框 */
+        }
+        
+        /* 搜索按钮样式 */
+        .search-btn {
+            height: 30px; /* 与输入框等高 */
+            padding: 0 15px; /* 左右内边距 */
+            background-color: #ffd700; /* 金黄色，与红色形成对比 */
+            color: #c00; /* 红色文字，呼应主色调 */
+            border: none; /* 去掉默认边框 */
+            border-radius: 0 3px 3px 0; /* 右圆角 */
+            cursor: pointer; /* 鼠标悬浮变手型，提示可点击 */
+            font-weight: bold; /* 文字加粗 */
+        }
+        
+        /* ===================== 轮播图样式 ===================== */
+        /* 轮播图容器 */
+        .ibox{
+            width: 100%; /* 宽度占满页面 */
+            height: 400px; /* 固定高度 */
+            position: relative; /* 相对定位，作为子元素绝对定位的参考 */
+        }
+        
+        /* 轮播图左切换按钮 */
+        .ibox #left{
+            width: 600px; /* 点击区域宽度 */
+            height: 400px; /* 与轮播容器等高 */
+            position: absolute; /* 绝对定位，覆盖在图片上 */
+            left: 0; /* 靠左 */
+            top: 0; /* 靠上 */
+            /* 自定义鼠标样式，提升交互体验 */
+            cursor: url(./img/cur/bigpicprev_1245caf.cur), default;
+        }
+        
+        /* 轮播图右切换按钮 */
+        .ibox #right{
+            width: 600px; /* 点击区域宽度 */
+            height: 400px; /* 与轮播容器等高 */
+            position: absolute; /* 绝对定位，覆盖在图片上 */
+            right: 0; /* 靠右 */
+            top: 0; /* 靠上 */
+            /* 自定义鼠标样式 */
+            cursor: url(./img/cur/bigpicnext_437c161.cur), default;
+        }
+        
+        /* 轮播图片样式 */
+        #bb{
+            width: 100%; /* 宽度占满容器 */
+            height: 100%; /* 高度占满容器 */
+            display: block; /* 转为块级元素，消除默认间隙 */
+        }
+        
+        /* ===================== 导航栏样式 ===================== */
+        .nav-bar {
+            background-color: #c00; /* 红色主色调 */
+            margin: 10px 0; /* 上下外边距，与其他模块分隔 */
+        }
+        
+        /* 导航列表 */
+        .nav-bar ul {
+            display: flex; /* 弹性布局，横向排列 */
+            list-style: none; /* 去掉默认列表圆点 */
+            justify-content: center; /* 水平居中 */
+        }
+        
+        /* 导航列表项 */
+        .nav-bar li {
+            margin: 0 15px; /* 列表项之间的左右间距 */
+        }
+        
+        /* 导航链接 */
+        .nav-bar a {
+            display: block; /* 转为块级元素，方便设置内边距 */
+            color: #fff; /* 白色文字 */
+            text-decoration: none; /* 去掉默认下划线 */
+            padding: 12px 20px; /* 内边距，增大点击区域 */
+            font-size: 16px;
+        }
+        
+        /* 激活/悬浮状态的导航链接 */
+        .nav-bar a.active,
+        .nav-bar a:hover {
+            background-color: #a00; /* 深红色背景，区分状态 */
+        }
+        
+        /* ===================== 红色足迹卡片样式 ===================== */
+        /* 卡片容器：网格布局 */
+        .footprint-container {
+            width: 1200px; /* 固定宽度，居中显示 */
+            margin: 0 auto; /* 左右自动居中 */
+            display: grid; /* 网格布局，便于卡片排版 */
+            grid-template-columns: repeat(3, 1fr); /* 3列等宽布局 */
+            gap: 20px; /* 卡片之间的间距 */
+            padding: 20px 0; /* 上下内边距 */
+        }
+        
+        /* 单个足迹卡片样式 */
+        .footprint-card {
+            background-color: #fff; /* 白色背景，突出内容 */
+            border-radius: 8px; /* 圆角，提升美观度 */
+            overflow: hidden; /* 隐藏超出部分，配合图片圆角 */
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* 轻微阴影，增加立体感 */
+            transition: transform 0.3s ease; /* 过渡动画，悬浮时平滑变化 */
+        }
+        
+        /* 卡片悬浮效果 */
+        .footprint-card:hover {
+            transform: translateY(-5px); /* 向上偏移5px，突出交互 */
+            box-shadow: 0 5px 15px rgba(192, 0, 0, 0.2); /* 加深阴影，强化悬浮效果 */
+        }
+        
+        /* 卡片内图片样式 */
+        .footprint-card img {
+            width: 100%; /* 宽度占满卡片 */
+            height: 200px; /* 固定图片高度 */
+            object-fit: cover; /* 保持比例填充，避免拉伸变形 */
+        }
+        
+        /* 卡片标题样式 */
+        .footprint-card h3 {
+            color: #c00; /* 红色文字，呼应主题 */
+            padding: 15px 15px 5px; /* 内边距，控制文字位置 */
+            font-size: 18px;
+        }
+        
+        /* 卡片描述文字样式 */
+        .footprint-card p {
+            color: #333; /* 深灰色文字，提升可读性 */
+            padding: 0 15px 15px; /* 内边距 */
+            line-height: 1.6; /* 行高，提升阅读体验 */
+            font-size: 14px;
+        }
+        
+        /* ===================== 底部标语样式 ===================== */
+        .bottom-banner {
+            background-color: #c00; /* 红色主色调 */
+            color: #fff; /* 白色文字 */
+            text-align: center; /* 文字居中 */
+            padding: 15px 0; /* 上下内边距 */
+            font-size: 18px;
+            font-weight: bold; /* 加粗突出 */
+            margin-top: 20px; /* 上外边距，与卡片区域分隔 */
+        }
+        
+       
+    </style>
+</head>
+<body>
+    <!-- ===================== 顶部横幅区域 ===================== -->
+    <div class="top-banner">
+        <div class="banner-text">传承红色基因，赓续红色血脉</div>
+		<!-- 滚动文字：增强页面氛围感 -->
+        <marquee id="content">清澈的爱，只为中国</marquee>
+        <!-- 搜索框容器 -->
+        <div class="banner-right">
+            <input type="text" class="search-input" placeholder="请输入查询内容">
+            <button class="search-btn">搜索</button>
+        </div>
+    </div>
+
+    <!-- ===================== 轮播图容器 ===================== -->
+    <div class="ibox">
+        <!-- 轮播图片：初始显示img/1.png，宽度500px -->
+        <img id="bb" src="img/1.png" width="500">
+        <!-- 左切换按钮（点击区域） -->
+        <div id="left"></div>
+        <!-- 右切换按钮（点击区域） -->
+        <div id="right"></div>
+    </div>
+
+    <!-- ===================== 导航栏 ===================== -->
+    <nav class="nav-bar">
+        <ul>
+            <li><a href="#" class="active">首页</a></li> <!-- 当前激活的导航项 -->
+            <li><a href="红色足迹.html" >红色足迹</a></li>
+            <li><a href="精神谱系.html">精神谱系</a></li>
+            <li><a href="薪火相传.html">薪火相传</a></li>
+            <li><a href="红色传承.html">红色传承</a></li>
+            <li><a href="红色语录墙.html">红色语录墙</a></li>
+            <li><a href="用户登录.html">用户登录</a></li>
+            <li><a href="在线自测.html">在线自测</a></li>
+        </ul>
+    </nav>
+
+    <!-- ===================== 红色足迹卡片区域 ===================== -->
+    <div class="footprint-container">
+        <!-- 卡片1：井冈山革命根据地 -->
+        <div class="footprint-card">
+            <img src="img/井冈山.jpeg" alt="井冈山革命根据地"> <!-- 卡片图片 -->
+            <h3>井冈山革命根据地</h3> <!-- 卡片标题 -->
+            <p>井冈山是中国革命的摇篮，1927年10月，毛泽东率领秋收起义部队抵达井冈山，创建了第一个农村革命根据地，开辟了农村包围城市、武装夺取政权的道路，孕育了伟大的井冈山精神。</p> <!-- 卡片描述 -->
+        </div>
+
+        <!-- 卡片2：延安革命圣地 -->
+        <div class="footprint-card">
+            <img src="img/延安.jpg" alt="延安革命圣地">
+            <h3>延安革命圣地</h3>
+            <p>延安是中国革命的圣地，从1935年到1948年，中共中央和毛泽东在这里领导、指挥了抗日战争和解放战争，奠定了新中国的基石，培育了光照千秋的延安精神。</p>
+        </div>
+
+        <!-- 卡片3：西柏坡 -->
+        <div class="footprint-card">
+            <img src="img/西柏坡.jpg" alt="西柏坡">
+            <h3>西柏坡</h3>
+            <p>西柏坡是新中国从这里走来的地方，1948年5月至1949年3月，中共中央在这里指挥了震惊中外的三大战役，召开了具有历史意义的七届二中全会，孕育了“两个务必”的西柏坡精神。</p>
+        </div>
+
+        <!-- 卡片4：遵义会议会址 -->
+        <div class="footprint-card">
+            <img src="img/遵义.jpg" alt="遵义会议会址">
+            <h3>遵义会议会址</h3>
+            <p>遵义会议是中国共产党历史上一个生死攸关的转折点，1935年1月召开的这次会议，确立了毛泽东在红军和党中央的领导地位，在极其危急的情况下挽救了党、挽救了红军、挽救了中国革命。</p>
+        </div>
+
+        <!-- 卡片5：古田会议会址 -->
+        <div class="footprint-card">
+            <img src="img/古田.jpg" alt="古田会议会址">
+            <h3>古田会议会址</h3>
+            <p>古田会议确立了思想建党、政治建军的原则，1929年12月召开的古田会议，解决了如何把以农民为主要成分的军队建设成为无产阶级领导的新型人民军队的问题，对我军建设产生了深远影响。</p>
+        </div>
+
+        <!-- 卡片6：瑞金红色故都 -->
+        <div class="footprint-card">
+            <img src="img/瑞金.jpg" alt="瑞金红色故都">
+            <h3>瑞金红色故都</h3>
+            <p>瑞金是共和国的摇篮，1931年11月，中华苏维埃第一次全国代表大会在这里召开，宣告中华苏维埃共和国临时中央政府成立，瑞金成为中央革命根据地的中心。</p>
+        </div>
+    </div>
+
+    <!-- ===================== 底部标语 ===================== -->
+    <div class="bottom-banner">
+        <p>我追随的光，是五星红旗的光！</p>
+    </div>
+
+    <!-- ===================== JavaScript交互逻辑 ===================== -->
+    <script>
+        // 1. 轮播图核心逻辑 - 手动切换图片
+        let imgs=["img/国徽.png","img/天安门.png"]; // 轮播图片数组
+        let currentIndex=0; // 当前显示图片的索引（初始为第一张）
+        
+        // 左切换按钮点击事件：切换到上一张图片
+        $("#left").click(function(){
+            currentIndex--; // 索引减1
+            // 边界判断：索引小于0时，切换到最后一张图片
+            if(currentIndex<0) currentIndex=imgs.length-1;
+            // 修改图片src属性，实现图片切换
+            $("#bb").attr("src",imgs[currentIndex]);
+        });
+        
+        // 右切换按钮点击事件：切换到下一张图片
+        $("#right").click(function(){
+            currentIndex++; // 索引加1
+            // 边界判断：索引大于等于数组长度时，切换到第一张图片
+            if(currentIndex>=imgs.length) currentIndex=0;
+            // 修改图片src属性，实现图片切换
+            $("#bb").attr("src",imgs[currentIndex]);
+        });
+        
+        // 2. 轮播图自动播放逻辑
+        let timer; // 存储定时器ID，用于后续清除定时器
+        
+        // 自动播放处理函数：切换到下一张图片
+        function autoPlayHandler(){
+            currentIndex++;
+            if(currentIndex>=imgs.length) currentIndex=0;
+            $("#bb").attr("src",imgs[currentIndex]);
+        };
+        
+        // 启动自动播放：每3秒执行一次autoPlayHandler
+        function autoPlay(){
+            timer=setInterval(autoPlayHandler,3000);
+        };
+        
+        // 鼠标悬停时：清除定时器，停止自动轮播
+        function pause(){ 保留原逻辑
+            clearInterval(timer);
+        }
+        
+        // 鼠标离开时：重新启动自动轮播
+        function resume(){
+            autoPlay();
+        }
+        
+        // 初始化函数：启动自动轮播并绑定鼠标事件
+        function Init(){
+            autoPlay(); // 页面加载后立即启动自动轮播
+            // 为左右切换按钮绑定hover事件（悬停/离开）
+            $("#left").hover(pasue,resume);
+            $("#right").hover(pasue,resume);
+        }
+        
+        // 页面加载完成后执行初始化函数（jQuery的DOM就绪事件）
+        $(Init);
+		
+		
+    </script>
+</body>
+</html>

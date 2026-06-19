@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>红色文化传承 - 红色足迹</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- 引入jQuery库，用于简化DOM操作和事件处理 -->
+    <script src="js/jquery-3.6.0.js"></script>
+    <style>
+       /* 全局样式重置 */
+       		* {
+       		    margin: 0;
+       		    padding: 0;
+       		    box-sizing: border-box;
+       		    font-family: "微软雅黑", sans-serif;
+       		}
+       		
+       		body {
+       		    background-color: #f5f5f5;
+       		}
+       		
+       		/* 顶部横幅 */
+       		.top-banner {
+       		    background-color: #c00;
+       		    color: #fff;
+       		    padding: 10px 20px;
+       		}
+       		.banner-right{
+       			display: flex;
+       			justify-content:right;
+       		}
+       		.banner-text {
+       		    font-size: 18px;
+       		    font-weight: bold;
+       		}
+       		
+       		
+       		.search-input {
+       		    width: 250px;
+       		    height: 30px;
+       		    padding: 0 10px;
+       		    border: none;
+       		    border-radius: 3px 0 0 3px;
+       		    outline: none;
+       		}
+       		
+       		.search-btn {
+       		    height: 30px;
+       		    padding: 0 15px;
+       		    background-color: #ffd700;
+       		    color: #c00;
+       		    border: none;
+       		    border-radius: 0 3px 3px 0;
+       		    cursor: pointer;
+       		    font-weight: bold;
+       		}
+       		
+       		/* 轮播图 */
+       		.ibox{
+       		width: 100%;
+       		height: 400px;
+       		position: relative;
+       		
+       		}
+       		.ibox #left{
+       		width: 600px;
+       		height: 400px;
+       		position: absolute;
+       		left: 0;
+       		top: 0;
+       		cursor: url(./img/cur/bigpicprev_1245caf.cur), default;
+       		}
+       		.ibox #right{
+       		width: 600px;
+       		height:400px;
+       		position: absolute;
+       		right: 0;
+       		top: 0;
+       		cursor: url(./img/cur/bigpicnext_437c161.cur), default;
+       		}
+       		#bb{
+       			width: 100%;
+       			height: 100%;
+       			display: block;
+       		}
+       		
+       		/* 导航栏 */
+       		.nav-bar {
+       		    background-color: #c00;
+       		    margin: 10px 0;
+       		}
+       		
+       		.nav-bar ul {
+       		    display: flex;
+       		    list-style: none;
+       		    justify-content: center;
+       		}
+       		
+       		.nav-bar li {
+       		    margin: 0 15px;
+       		}
+       		
+       		.nav-bar a {
+       		    display: block;
+       		    color: #fff;
+       		    text-decoration: none;
+       		    padding: 12px 20px;
+       		    font-size: 16px;
+       		}
+       		
+       		.nav-bar a.active,
+       		.nav-bar a:hover {
+       		    background-color: #a00;
+       		}
+        /* ===================== 底部标语样式 ===================== */
+        .bottom-banner {
+            background-color: #c00;
+            color: #fff;
+            text-align: center; /* 文字居中 */
+            padding: 15px 0;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        
+        /* ===================== 答题区域样式 ===================== */
+        /* 答题容器 */
+        .quiz-container {
+            max-width: 900px; /* 最大宽度 */
+            margin: 30px auto; /* 上下间距，左右自动居中 */
+            padding: 0 20px; /* 左右内边距 */
+        }
+        /* 答题头部 */
+        .quiz-header {
+            background-color: #d32f2f; /* 红色背景 */
+            color: white; /* 白色文字 */
+            padding: 20px;
+            border-radius: 8px 8px 0 0; /* 上圆角 */
+            text-align: center; /* 文字居中 */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* 阴影效果 */
+        }
+        /* 答题标题 */
+        .quiz-header h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        /* 答题元信息（用时/得分） */
+        .quiz-meta {
+            background-color: white;
+            padding: 15px 20px;
+            border-radius: 0 0 8px 8px; /* 下圆角 */
+            margin-bottom: 30px;
+            display: flex; /* 弹性布局 */
+            justify-content: space-between; /* 两端对齐 */
+            align-items: center; /* 垂直居中 */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* 阴影效果 */
+        }
+        /* 元信息文字 */
+        .quiz-meta span {
+            font-size: 16px;
+            color: #d32f2f; /* 红色文字 */
+            font-weight: bold;
+            padding: 5px 10px;
+            border: 1px solid #fce4e4; /* 浅红边框 */
+            border-radius: 4px; /* 圆角 */
+            background-color: #fff8f8; /* 浅红背景 */
+        }
+        /* 题目容器 */
+        .topic {
+            background-color: white;
+            border-radius: 8px; /* 圆角 */
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1); /* 阴影效果 */
+            padding: 30px;
+        }
+        /* 单个题目项 */
+        .question-item {
+            margin-bottom: 25px; /* 底部间距 */
+            padding-bottom: 20px; /* 底部内边距 */
+            border-bottom: 1px solid #f0f0f0; /* 底部分隔线 */
+        }
+        /* 最后一个题目项去掉分隔线和间距 */
+        .question-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        /* 题目文字 */
+        .question-item p {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #2d3748; /* 深灰色文字 */
+            font-weight: 500; /* 中等加粗 */
+            display: flex; /* 弹性布局 */
+            align-items: flex-start; /* 顶部对齐 */
+        }
+        /* 题目序号圆形背景（伪元素） */
+        .question-item p:before {
+            content: ""; /* 内容为空，通过样式显示序号 */
+            display: inline-block; /* 行内块元素 */
+            width: 24px;
+            height: 24px;
+            background-color: #d32f2f; /* 红色背景 */
+            color: white; /* 白色文字 */
+            border-radius: 50%; /* 圆形 */
+            text-align: center; /* 文字居中 */
+            line-height: 24px; /* 行高等于高度，垂直居中 */
+            margin-right: 10px; /* 右侧间距 */
+            font-size: 14px;
+            flex-shrink: 0; /* 不收缩 */
+        }
+        /* 为每个题目设置对应的序号 */
+        .question-item:nth-child(1) p:before { content: "1"; }
+        .question-item:nth-child(2) p:before { content: "2"; }
+        .question-item:nth-child(3) p:before { content: "3"; }
+        .question-item:nth-child(4) p:before { content: "4"; }
+        .question-item:nth-child(5) p:before { content: "5"; }
+        
+        /* 选项容器（网格布局） */
+        .select {
+            display: grid; /* 网格布局 */
+            /* 自动填充，最小宽度250px，最大占满一行 */
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 12px; /* 网格间距 */
+        }
+        /* 单个选项 */
+        .select div {
+            display: flex; /* 弹性布局 */
+            align-items: center; /* 垂直居中 */
+            padding: 10px 15px;
+            background-color: #f8f9fa; /* 浅灰色背景 */
+            border-radius: 6px; /* 圆角 */
+            transition: all 0.3s ease; /* 过渡动画 */
+        }
+        /* 选项悬浮效果 */
+        .select div:hover {
+            background-color: #fce4e4; /* 浅红色背景 */
+            transform: translateY(-2px); /* 向上偏移2px */
+        }
+        /* 单选/复选框样式 */
+        .select input[type="radio"],
+        .select input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-right: 10px; /* 右侧间距 */
+            accent-color: #d32f2f; /* 选中颜色为红色 */
+        }
+        /* 选项标签 */
+        .select label {
+            font-size: 16px;
+            color: #4a5568; /* 中灰色文字 */
+            cursor: pointer; /* 鼠标悬浮变手型 */
+            flex: 1; /* 占满剩余空间 */
+        }
+        /* 提交按钮容器 */
+        .bottom {
+            text-align: center; /* 文字居中 */
+            margin: 30px 0; /* 上下间距 */
+        }
+        /* 提交按钮 */
+        #submitBtn{
+            background-color: #d32f2f; /* 红色背景 */
+            color: white; /* 白色文字 */
+            border: none; /* 去掉边框 */
+            padding: 12px 40px; /* 内边距 */
+            font-size: 18px;
+            border-radius: 6px; /* 圆角 */
+            cursor: pointer; /* 鼠标悬浮变手型 */
+            transition: all 0.3s ease; /* 过渡动画 */
+            box-shadow: 0 4px 6px rgba(211, 47, 47, 0.2); /* 阴影效果 */
+        }
+        /* 提交按钮悬浮效果 */
+        #submitBtn:hover {
+            background-color: #b71c1c; /* 深红色背景 */
+            transform: translateY(-2px); /* 向上偏移2px */
+            box-shadow: 0 6px 8px rgba(211, 47, 47, 0.3); /* 加深阴影 */
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部横幅：包含标语、滚动文字、搜索框 -->
+    <div class="top-banner">
+        <div class="banner-text">传承红色基因，赓续红色血脉</div>
+        <!-- 滚动文字 -->
+        <marquee id="content">清澈的爱，只为中国</marquee>
+        <!-- 搜索框容器 -->
+        <div class="banner-right">
+            <input type="text" class="search-input" placeholder="请输入查询内容">
+            <button class="search-btn">搜索</button>
+        </div>
+    </div>
+
+    <!-- 轮播图容器：包含图片和左右切换按钮 -->
+    <div class="ibox">
+        <img id="bb" src="img/1.png" alt="红色文化">
+        <div id="left"></div> <!-- 左切换按钮 -->
+        <div id="right"></div> <!-- 右切换按钮 -->
+    </div>
+
+    <!-- 导航栏：网站主要导航链接 -->
+    <nav class="nav-bar">
+        <ul>
+            <li><a href="首页.html" >首页</a></li>
+            <li><a href="红色足迹.html">红色足迹</a></li>
+            <li><a href="精神谱系.html">精神谱系</a></li>
+            <li><a href="薪火相传.html">薪火相传</a></li>
+            <li><a href="红色传承.html">红色传承</a></li>
+            <li><a href="红色语录墙.html">红色语录墙</a></li>
+            <li><a href="用户登录.html">用户登录</a></li>
+            <li><a href="#" class="active">在线自测</a></li> <!-- 当前激活的导航项 -->
+        </ul>
+    </nav>
+
+    <!-- 答题区域：包含答题标题、计时/得分、题目列表、提交按钮 -->
+    <div class="quiz-container">
+        <!-- 答题头部标题 -->
+        <div class="quiz-header">
+            <h2>红色革命历史知识在线测试（100分）</h2>
+            <p>测试您的红色文化素养，传承革命精神</p>
+        </div>
+        
+        <!-- 答题元信息：用时和得分展示 -->
+        <div class="quiz-meta">
+            <div>用时：<span id="qtime">00分00秒</span></div>
+            <div>得分：<span id="qscore">0</span> 分</div>
+        </div>
+        
+        <!-- 题目容器 -->
+        <div class="topic">
+            <!-- 题目1：单选题 -->
+            <div class="question-item" id="q1">
+                <p>1. 中国共产党成立于哪一年？</p>
+                <div class="select">
+                    <div><label><input type="radio" name="r1" value="A">A. 1919年</label></div>
+                    <div><label><input type="radio" name="r1" value="B">B. 1921年</label></div>
+                    <div><label><input type="radio" name="r1" value="C">C. 1949年</label></div>
+                    <div><label><input type="radio" name="r1" value="D">D. 1978年</label></div>
+                </div>
+            </div>
+            
+            <!-- 题目2：多选题 -->
+            <div class="question-item" id="q2">
+                <p>2. 下列哪些是中国工农红军长征途中的重要事件？（多选）</p>
+                <div class="select">
+                    <div><label><input type="checkbox" name="c2" value="A">A. 遵义会议</label></div>
+                    <div><label><input type="checkbox" name="c2" value="B">B. 四渡赤水</label></div>
+                    <div><label><input type="checkbox" name="c2" value="C">C. 平型关大捷</label></div>
+                    <div><label><input type="checkbox" name="c2" value="D">D. 飞夺泸定桥</label></div>
+                    <div><label><input type="checkbox" name="c2" value="E">E. 井冈山会师</label></div>
+                </div>
+            </div>
+            
+            <!-- 题目3：单选题 -->
+            <div class="question-item" id="q3">
+                <p>3. 中华人民共和国成立的日期是？</p>
+                <div class="select">
+                    <div><label><input type="radio" name="r3" value="A">A. 1945年8月15日</label></div>
+                    <div><label><input type="radio" name="r3" value="B">B. 1945年9月2日</label></div>
+                    <div><label><input type="radio" name="r3" value="C">C. 1949年10月1日</label></div>
+                    <div><label><input type="radio" name="r3" value="D">D. 1949年10月2日</label></div>
+                </div>
+            </div>
+            
+            <!-- 题目4：多选题 -->
+            <div class="question-item" id="q4">
+                <p>4. 下列哪些属于中国革命精神谱系的重要组成部分？（多选）</p>
+                <div class="select">
+                    <div><label><input type="checkbox" name="c4" value="A">A. 红船精神</label></div>
+                    <div><label><input type="checkbox" name="c4" value="B">B. 长征精神</label></div>
+                    <div><label><input type="checkbox" name="c4" value="C">C. 延安精神</label></div>
+                    <div><label><input type="checkbox" name="c4" value="D">D. 抗疫精神</label></div>
+                    <div><label><input type="checkbox" name="c4" value="E">E. 两弹一星精神</label></div>
+                </div>
+            </div>
+            
+            <!-- 题目5：单选题 -->
+            <div class="question-item" id="q5">
+                <p>5. 抗日战争全面爆发的标志是？</p>
+                <div class="select">
+                    <div><label><input type="radio" name="r5" value="A">A. 九一八事变</label></div>
+                    <div><label><input type="radio" name="r5" value="B">B. 一二八事变</label></div>
+                    <div><label><input type="radio" name="r5" value="C">C. 七七事变</label></div>
+                    <div><label><input type="radio" name="r5" value="D">D. 八一三事变</label></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 提交按钮容器 -->
+        <div class="bottom">
+            <!-- 提交按钮：点击后执行checkQ()，并禁用自身 -->
+            <input type="button" id="submitBtn" value="提交答案" onclick="checkQ();this.disabled='disabled'">
+        </div>
+    </div>
+
+    <!-- 底部标语 -->
+    <div class="bottom-banner">
+        <p>&copy;版权所有 24国一张嘉馨 2414126017</p>
+    </div>
+
+    <script>
+        // ===================== 轮播图功能 =====================
+        // 1. 轮播图图片数组
+        let imgs=["img/国徽.png","img/天安门.png"];
+        let currentIndex=0;// 当前显示图片的索引
+        
+        // 左切换按钮点击事件：切换到上一张图片
+        $("#left").click(function(){
+            currentIndex--; // 索引减1
+            // 边界判断：索引小于0时，切换到最后一张
+            if(currentIndex<0) currentIndex=imgs.length-1;
+            // 修改图片src属性，切换图片
+            $("#bb").attr("src",imgs[currentIndex]);
+        });
+        
+        // 右切换按钮点击事件：切换到下一张图片
+        $("#right").click(function(){
+            currentIndex++; // 索引加1
+            // 边界判断：索引大于等于数组长度时，切换到第一张
+            if(currentIndex>=imgs.length) currentIndex=0;
+            // 修改图片src属性，切换图片
+            $("#bb").attr("src",imgs[currentIndex]);
+        });
+        
+        // 2. 自动轮播功能
+        let timer; // 存储定时器ID，用于清除定时器
+        // 自动轮播处理函数：切换到下一张图片
+        function autoPlayHandler(){
+            currentIndex++;
+            if(currentIndex>=imgs.length) currentIndex=0;
+            $("#bb").attr("src",imgs[currentIndex]);
+        };
+        // 启动自动轮播：每3秒执行一次autoPlayHandler
+        function autoPlay(){
+            timer=setInterval(autoPlayHandler,3000);
+        };
+        
+        // 鼠标悬停时：清除定时器，停止自动轮播
+        function pasue(){
+            clearInterval(timer);
+        }
+        // 鼠标离开时：重新启动自动轮播
+        function resume(){
+            autoPlay();
+        }
+        // 初始化函数：启动自动轮播并绑定鼠标悬停/离开事件
+        function Init(){
+            autoPlay();
+            // 为左右切换按钮绑定hover事件（悬停/离开）
+            $("#left").hover(pasue,resume);
+            $("#right").hover(pasue,resume);
+        }
+        // 页面加载完成后执行初始化函数
+        $(Init);
+        
+        // ===================== 在线自测功能 =====================
+        // 1. 答题计时功能
+        var qtime=0; // 答题总秒数
+        // 计时更新函数：每秒更新一次用时显示
+        function setTime(){
+            qtime++; // 总秒数加1
+            let m=Math.floor((qtime/60)); // 计算分钟数（向下取整）
+            let s=qtime-m*60; // 计算剩余秒数
+            // 补零处理：小于10的数字前面加0
+            m=m<10 ? "0"+m : m;
+            s=s<10 ? "0"+s : s;
+            // 更新页面上的用时显示
+            document.getElementById("qtime").innerHTML=m+"分"+s+"秒";
+        };
+        // 启动计时器：每1秒执行一次setTime
+        var qid=setInterval('setTime()',1000);
+        
+        // 2. 答案校验和评分功能
+        function checkQ(){
+            // 正确答案数组：顺序对应5道题的正确答案
+            let answer=["B","ABD","C","ABCDE","C"];
+            let ds=[20,20,20,20,20]; // 每题分值（总分100）
+            let score=0; // 最终得分
+            
+            // 获取所有题目的选项容器
+            let qs = document.getElementsByClassName("select");
+            // 遍历每一道题
+            for(var i=0; i<qs.length; i++){
+                // 获取当前题的所有输入框（单选/复选框）
+                var cs = qs[i].getElementsByTagName("input");
+                var a = ""; // 存储当前题的用户答案（拼接成字符串）
+                
+                // 遍历当前题的所有选项，收集选中的答案
+                for(let j=0; j<cs.length; j++){
+                    if(cs[j].checked){ // 判断选项是否被选中
+                        a += cs[j].value; // 拼接选中选项的value值（如：ABD）
+                    }
+                }
+                
+                // 比对用户答案和正确答案：相等则加对应分值
+                if(a==answer[i]) score+=ds[i];
+            };
+             
+            // 更新页面上的得分显示
+            document.getElementById("qscore").innerText = score;
+            clearInterval(qid); // 停止计时
+            
+            // 弹出提示框，显示答题结果
+            alert("答题完成！您的得分：" + score + "分\n用时：" + document.getElementById("qtime").innerHTML);
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>红色文化传承 - 红色足迹</title>
+    <link rel="stylesheet" href="css/style.css">
+	<!-- JS引入（轮播图等交互） -->
+	<script src="js/jquery-3.6.0.js"></script>
+	<style>
+		/* 全局样式重置 */
+		* {
+		    margin: 0;
+		    padding: 0;
+		    box-sizing: border-box;
+		    font-family: "微软雅黑", sans-serif;
+		}
+		
+		body {
+		    background-color: #f5f5f5;
+		}
+		
+		/* 顶部横幅 */
+		.top-banner {
+		    background-color: #c00;
+		    color: #fff;
+		    padding: 10px 20px;    
+		}
+		.banner-right{
+			display: flex;
+			justify-content:right;
+		}
+		.banner-text {
+		    font-size: 18px;
+		    font-weight: bold;
+		}
+		
+		
+		.search-input {
+		    width: 250px;
+		    height: 30px;
+		    padding: 0 10px;
+		    border: none;
+		    border-radius: 3px 0 0 3px;
+		    outline: none;
+		}
+		
+		.search-btn {
+		    height: 30px;
+		    padding: 0 15px;
+		    background-color: #ffd700;
+		    color: #c00;
+		    border: none;
+		    border-radius: 0 3px 3px 0;
+		    cursor: pointer;
+		    font-weight: bold;
+		}
+		
+		/* 轮播图 */
+		.ibox{
+		width: 100%;
+		height: 400px;
+		position: relative;
+		
+		}
+		.ibox #left{
+		width: 600px;
+		height: 400px;
+		position: absolute;
+		left: 0;
+		top: 0;
+		cursor: url(./img/cur/bigpicprev_1245caf.cur), default;
+		}
+		.ibox #right{
+		width: 600px;
+		height:400px;
+		position: absolute;
+		right: 0;
+		top: 0;
+		cursor: url(./img/cur/bigpicnext_437c161.cur), default;
+		}
+		#bb{
+			width: 100%;
+			height: 100%;
+			display: block;
+		}
+		
+		/* 导航栏 */
+		.nav-bar {
+		    background-color: #c00;
+		    margin: 10px 0;
+		}
+		
+		.nav-bar ul {
+		    display: flex;
+		    list-style: none;
+		    justify-content: center;
+		}
+		
+		.nav-bar li {
+		    margin: 0 15px;
+		}
+		
+		.nav-bar a {
+		    display: block;
+		    color: #fff;
+		    text-decoration: none;
+		    padding: 12px 20px;
+		    font-size: 16px;
+		}
+		
+		.nav-bar a.active,
+		.nav-bar a:hover {
+		    background-color: #a00;
+		}
+		
+		/* 主内容区 */
+		.container {
+		    width: 90%;
+		    max-width: 1200px;
+		    margin: 30px auto;
+		    background-color: #fff;
+		    padding: 20px;
+		    border-radius: 8px;
+		    box-shadow: var(--shadow);
+		}
+		
+		/* 精神卡片 */
+		.spirit-card {
+		    display: flex;
+		    margin-bottom: 30px;
+		    border-bottom: 1px dashed #eee;
+		    padding-bottom: 20px;
+		    padding: 15px;
+		    border-radius: 8px;
+		}
+		
+		.spirit-card:hover {
+		    box-shadow: 0 4px 12px rgba(183, 28, 28, 0.1);
+		    transform: translateY(-2px);
+		}
+		
+		.spirit-img {
+		    width: 300px;
+		    height: 200px;
+		    object-fit: cover;
+		    border-radius: 4px;
+		    margin-right: 25px;
+		}
+		#submitBtn{
+		    background-color: #d32f2f;
+		    color: white;
+		    border: none;
+		    padding: 12px 40px;
+		    font-size: 18px;
+		    border-radius: 6px;
+		    cursor: pointer;
+			/* 平滑动画 */
+		    transition: all 0.3s ease;
+		    box-shadow: 0 4px 6px rgba(211, 47, 47, 0.2);
+		}
+		
+		#submitBtn:hover {
+		    background-color: #b71c1c;
+		    transform: translateY(-2px);
+		    box-shadow: 0 6px 8px rgba(211, 47, 47, 0.3);
+		}
+		
+		/* 鼠标悬停图片：红色阴影 + 轻微放大 */
+		.spirit-img:hover {
+		    box-shadow: 0 0 15px 5px rgba(183, 28, 28, 0.5); /* 红色半透明阴影 */
+		    transform: scale(1.02); /* 轻微放大增强交互 */
+		}
+		
+		.spirit-content {
+		    flex: 1;
+		    display: flex;
+		    flex-direction: column;
+		    justify-content: center;
+		}
+		
+		.spirit-title {
+		    color: #cc0000;
+		    font-size: 24px;
+		    margin-bottom: 15px;
+		    font-weight: bold;
+		    line-height: 1.3;
+		}
+		.spirit-title:hover{
+			font-size: 34px;
+		}
+		
+		.spirit-desc {
+		    color: #333;
+		    line-height: 1.8; 
+		    font-size: 15px;
+		    text-align: justify;
+		}
+		
+		
+		/* 底部标语 */
+		.bottom-banner {
+		    background-color: #c00;
+		    color: #fff;
+		    text-align: center;
+		    padding: 15px 0;
+		    font-size: 18px;
+		    font-weight: bold;
+		    margin-top: 20px;
+		}
+		
+		
+		    .top-banner {
+		        flex-direction: column;
+		        gap: 10px;
+		    }
+		
+		    .search-input {
+		        width: 200px;
+		    }
+		
+		    .nav-bar ul {
+		        flex-wrap: wrap;
+		    }
+		}
+	</style>
+</head>
+<body>
+
+    <!-- 顶部横幅 -->
+    <div class="top-banner">
+        <div class="banner-text">传承红色基因，赓续红色血脉</div>
+		<marquee id="content">清澈的爱，只为中国</marquee>
+		<div class="banner-right">
+			<input type="text" class="search-input" placeholder="请输入查询内容">
+			<button class="search-btn">搜索</button>
+		</div>
+			
+        
+    </div>
+
+    <!-- 轮播图容器 -->
+   
+	<div class="ibox">
+		<img id="bb" src="img/1.png" width="500">
+	
+		<div id="left"></div>
+		<div id="right"></div>
+	</div>
+
+    <!-- 导航栏 -->
+    <nav class="nav-bar">
+        <ul>
+            <li><a href="首页.html" >首页</a></li>
+            <li><a href="红色足迹.html" >红色足迹</a></li>
+            <li><a href="#" class="active">精神谱系</a></li>
+            <li><a href="薪火相传.html">薪火相传</a></li>
+			<li><a href="红色传承.html">红色传承</a></li>
+            <li><a href="红色语录墙.html">红色语录墙</a></li>
+            <li><a href="用户登录.html">用户登录</a></li>
+			<li><a href="在线自测.html">在线自测</a></li>
+			
+        </ul>
+    </nav>
+
+    <!-- 主内容区（语义化main） -->
+    <main class="container">
+        <!-- 井冈山精神 -->
+        <div class="spirit-card">
+            <img src="img/井冈山zyt.jpg" alt="井冈山革命根据地，山峦叠翠，红旗飘扬" class="spirit-img" loading="lazy">
+            <div class="spirit-content">
+                <h2 class="spirit-title">井冈山精神</h2>
+                <p class="spirit-desc">井冈山精神是中国共产党在井冈山根据地培育的伟大革命精神，其核心是：坚定信念、艰苦奋斗，实事求是、敢闯新路，依靠群众、勇于胜利。井冈山精神是中国革命精神之源，是中国共产党人的精神财富，它体现了共产党人对理想信念的执着追求，对革命事业的无限忠诚，对人民群众的深厚感情。在新的历史条件下，弘扬井冈山精神，就要坚定理想信念，保持艰苦奋斗的作风，坚持实事求是的思想路线，不断推进理论创新和实践创新。</p>
+    			<input id="submitBtn" type="button" value="点击此处详细了解" onclick="window.open('https://baike.so.com/doc/30524596-32405675.html')"/>
+            </div>
+        </div>
+    
+        <!-- 长征精神 -->
+        <div class="spirit-card">
+            <img src="img/长征.jpg" alt="红军长征途中翻雪山过草地，不畏艰险勇往直前" class="spirit-img" loading="lazy">
+            <div class="spirit-content">
+                <h2 class="spirit-title">长征精神</h2>
+                <p class="spirit-desc">长征精神是中国工农红军在长征中展现的伟大精神力量，其主要内涵是：把全国人民和中华民族的根本利益看得高于一切，坚定革命的理想和信念，坚信正义事业必然胜利的精神；为了救国救民，不怕任何艰难险阻，不惜付出一切牺牲的精神；坚持独立自主、实事求是，一切从实际出发的精神；顾全大局、严守纪律、紧密团结的精神；紧紧依靠人民群众，同人民群众生死相依、患难与共、艰苦奋斗的精神。长征精神是中华民族百折不挠、自强不息的民族精神的最高体现。</p>
+    			<input id="submitBtn" type="button" value="点击此处详细了解" onclick="window.open('https://baike.so.com/doc/5610097-32362695.html')"/>
+            </div>
+        </div>
+    
+        <!-- 延安精神 -->
+        <div class="spirit-card">
+            <img src="img/延安zyt.jpg" alt="延安窑洞灯火通明，革命先辈们艰苦奋斗开展革命工作" class="spirit-img" loading="lazy">
+            <div class="spirit-content">
+                <h2 class="spirit-title">延安精神</h2>
+                <p class="spirit-desc">延安精神是中国共产党在延安时期培育的伟大革命精神，其主要内容是：坚定正确的政治方向，解放思想、实事求是的思想路线，全心全意为人民服务的根本宗旨，自力更生、艰苦奋斗的创业精神。延安精神是中国共产党性质和宗旨的集中体现，是中国共产党人崇高品德和伟大情怀的生动展示。延安精神培育了一代又一代中国共产党人，是我们党的宝贵精神财富，新时代弘扬延安精神，对于加强党的建设、推进中国特色社会主义事业具有重要意义。</p>
+    			<input id="submitBtn"  type="button" value="点击此处详细了解" onclick="window.open('https://baike.so.com/doc/5387958-5624509.html')"/>
+            </div>
+        </div>
+    </main>
+
+    <!-- 底部标语 -->
+    <div class="bottom-banner">
+        <p>&copy;版权所有 24国一张雨桐 2414126026</p>
+    </div>
+
+   
+	
+	<script>
+		
+		//1.jquery实现图片反转
+		let imgs=["img/国徽.png","img/天安门.png"];
+		let currentIndex=0;//当前图片索引
+		$("#left").click(function(){
+			currentIndex--;
+			if(currentIndex<0) currentIndex=imgs.length-1;
+				$("#bb").attr("src",imgs[currentIndex]);
+			});
+			
+		
+		$("#right").click(function(){
+			currentIndex++;
+			if(currentIndex>=imgs.length) currentIndex=0;
+				$("#bb").attr("src",imgs[currentIndex]);
+			});
+		
+		//2.定时器轮播
+		let	timer;//存储定时器id set
+		function autoPlayHandler(){
+			currentIndex++;
+			if(currentIndex>=imgs.length) currentIndex=0;
+				$("#bb").attr("src",imgs[currentIndex]);
+		};
+		function autoPlay(){
+			timer=setInterval(autoPlayHandler,3000);
+		};
+			
+		//鼠标悬停 清除定时器
+		function pasue(){
+			clearInterval(timer);
+		}
+		//鼠标离开 启动定时器
+		function resume(){
+			autoPlay();
+		}
+		function Init(){
+			autoPlay();
+			//鼠标悬停 绑定时间
+			$("#left").hover(pasue,resume);
+			$("#right").hover(pasue,resume);
+			
+		}
+		//加载jquery
+		$(Init);
+		
+	</script>
+</body>
+</html>

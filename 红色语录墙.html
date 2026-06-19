@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>红色文化传承 - 红色足迹</title>
+    <link rel="stylesheet" href="css/style.css">
+	<!-- JS引入（轮播图等交互） -->
+	<script src="js/jquery-3.6.0.js"></script>
+	<style>
+		/* 全局样式重置 */
+		* {
+		    margin: 0;
+		    padding: 0;
+		    box-sizing: border-box;
+		    font-family: "微软雅黑", sans-serif;
+		}
+		
+		body {
+		    background-color: #f5f5f5;
+		}
+		
+		/* 顶部横幅 */
+		.top-banner {
+		    background-color: #c00;
+		    color: #fff;
+		    padding: 10px 20px;
+		    flex-direction: column;
+			gap: 10px;
+		   /* gap Flex 布局（也支持 Grid 布局）的属性，用于设置弹性容器内子元素之间的间距 */
+		    
+		}
+		.banner-right{
+			display: flex;
+			justify-content:right;
+		}
+		.banner-text {
+		    font-size: 18px;
+		    font-weight: bold;
+		}
+		
+		
+		.search-input {
+		    width: 250px;
+		    height: 30px;
+		    padding: 0 10px;
+		    border: none;
+		    border-radius: 3px 0 0 3px;
+		    outline: none;
+		}
+		
+		.search-btn {
+		    height: 30px;
+		    padding: 0 15px;
+		    background-color: #ffd700;
+		    color: #c00;
+		    border: none;
+		    border-radius: 0 3px 3px 0;
+		    cursor: pointer;
+		    font-weight: bold;
+		}
+		
+		/* 轮播图 */
+		.ibox{
+		width: 100%;
+		height: 400px;
+		position: relative;
+		
+		}
+		.ibox #left{
+		width: 600px;
+		height: 400px;
+		position: absolute;
+		left: 0;
+		top: 0;
+		cursor: url(./img/cur/bigpicprev_1245caf.cur), default;
+		}
+		.ibox #right{
+		width: 600px;
+		height: 400px;
+		position: absolute;
+		right: 0;
+		top: 0;
+		cursor: url(./img/cur/bigpicnext_437c161.cur), default;
+		}
+		#bb{
+			width: 100%;
+			height: 100%;
+			display: block;
+		}
+		
+		/* 导航栏 */
+		.nav-bar {
+		    background-color: #c00;
+		    margin: 10px 0;
+		}
+		
+		.nav-bar ul {
+		    display: flex;
+		    list-style: none;
+		    justify-content: center;
+		}
+		
+		.nav-bar li {
+		    margin: 0 15px;
+		}
+		
+		.nav-bar a {
+		    display: block;
+		    color: #fff;
+		    text-decoration: none;
+		    padding: 12px 20px;
+		    font-size: 16px;
+		}
+		
+		.nav-bar a.active,
+		.nav-bar a:hover {
+		    background-color: #a00;
+		}
+        /* 内容容器样式 */
+        .container {
+            width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        /* 表单样式 */
+        .add-form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        .add-form h2 {
+            color: #c81623;
+            margin-bottom: 20px;
+        }
+        .add-form .form-item {
+            margin-bottom: 15px;
+        }
+        .add-form .form-item label {
+            display: block;
+            margin-bottom: 5px;
+            color: #c81623;
+            font-weight: bold;
+        }
+        .add-form .form-item input,
+        .add-form .form-item textarea,
+        .add-form .form-item select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        .add-form .form-item textarea {
+            height: 100px;
+            resize: none;
+        }
+        .add-form .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .add-form .btn-group button {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .add-form .btn-group .btn-add {
+            background-color: #c81623;
+            color: #fff;
+        }
+        .add-form .btn-group .btn-reset {
+            background-color: #eee;
+            color: #333;
+        }
+        /* 语录墙样式 */
+        .quote-wall {
+            margin-top: 30px;
+        }
+        .quote-wall h2 {
+            color: #c81623;
+            margin-bottom: 20px;
+        }
+        .quote-wall .search-bar {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .quote-wall .search-bar input,
+        .quote-wall .search-bar select {
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        .quote-list {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .quote-item {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .quote-item .content {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        .quote-item .author {
+            text-align: right;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .quote-item .tags {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+        .quote-item .tags span {
+            background-color: #ff9900;
+            color: #fff;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+        .quote-item .time {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 10px;
+        }
+        .quote-item .btn-group {
+            display: flex;
+            justify-content: flex-end;
+            gap: 5px;
+        }
+        .quote-item .btn-group button {
+            padding: 3px 8px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .quote-item .btn-group .btn-edit {
+            background-color: #ff9900;
+            color: #fff;
+        }
+        .quote-item .btn-group .btn-delete {
+            background-color: #c81623;
+            color: #fff;
+        }
+        /* 底部样式 */
+        .footer {
+             background-color: #c00;
+             color: #fff;
+             text-align: center;
+             padding: 15px 0;
+             font-size: 18px;
+             font-weight: bold;
+             margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+  <!-- 顶部横幅 -->
+  <div class="top-banner">
+      <div class="banner-text">传承红色基因，赓续红色血脉</div>
+  	<marquee id="content">清澈的爱，只为中国</marquee>
+  	<div class="banner-right">
+  		<input type="text" class="search-input" placeholder="请输入查询内容">
+  		<button class="search-btn">搜索</button>
+  	</div>
+  		
+      
+  </div>
+  
+  <!-- 轮播图容器 -->
+     
+  <div class="ibox">
+  	<img id="bb" src="img/1.png" width="500">
+  
+  	<div id="left"></div>
+  	<div id="right"></div>
+  </div>
+  
+  <!-- 导航栏 -->
+  <nav class="nav-bar">
+      <ul>
+          <li><a href="首页.html">首页</a></li>
+          <li><a href="红色足迹.html" >红色足迹</a></li>
+          <li><a href="精神谱系.html">精神谱系</a></li>
+          <li><a href="薪火相传.html">薪火相传</a></li>
+		  <li><a href="红色传承.html">红色传承</a></li>
+          <li><a href="#" class="active">红色语录墙</a></li>
+          <li><a href="用户登录.html">用户登录</a></li>
+		  <li><a href="在线自测.html">在线自测</a></li>
+		  
+      </ul>
+  </nav>
+
+    <!-- 内容容器 -->
+    <div class="container">
+        <!-- 添加语录表单 -->
+        <div class="add-form">
+            <h2>红色语录留言墙</h2>
+            <p>分享红色经典语录，传承革命精神</p>
+            <form id="quoteForm">
+                <div class="form-item">
+                    <label for="quoteContent">语录内容 *</label>
+                    <textarea id="quoteContent" placeholder="请输入红色经典语录或您的感悟..."></textarea>
+                </div>
+                <div class="form-item">
+                    <label for="quoteAuthor">作者/出处</label>
+                    <input type="text" id="quoteAuthor" placeholder="请输入语录作者或出处">
+                </div>
+                <div class="form-item">
+                    <label for="quoteTag">标签分类</label>
+                    <select id="quoteTag">
+                        <option value="革命精神">革命精神</option>
+                        <option value="励志名言">励志名言</option>
+                        <option value="历史经典">历史经典</option>
+                        <option value="党的教导">党的教导</option>
+                        <option value="红色精神">红色精神</option>
+                    </select>
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="btn-add" id="addQuoteBtn">添加语录</button>
+                    <button type="reset" class="btn-reset">重置</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- 语录墙展示 -->
+        <div class="quote-wall">
+            <h2>红色语录墙</h2>
+            <div class="search-bar">
+                <input type="text" placeholder="搜索语录...">
+                <select>
+                    <option value="全部标签">全部标签</option>
+                    <option value="革命精神">革命精神</option>
+                    <option value="励志名言">励志名言</option>
+                    <option value="历史经典">历史经典</option>
+                    <option value="党的教导">党的教导</option>
+                    <option value="红色精神">红色精神</option>
+                </select>
+            </div>
+            <div class="quote-list" id="quoteList">
+                <!-- 语录项将通过JS动态生成 -->
+                <div class="quote-item">
+                    <div class="content">我们中华民族有同自己的敌人血战到底的气概，有在自力更生的基础上光复旧物的决心，有自立于世界民族之林的能力！</div>
+                    <div class="author">—— 毛泽东</div>
+                    <div class="tags">
+                        <span>革命精神</span>
+                    </div>
+                    <div class="time">2025-10-01</div>
+                    <div class="btn-group">
+                        <button class="btn-edit">编辑</button>
+                        <button class="btn-delete">删除</button>
+                    </div>
+                </div>
+                <div class="quote-item">
+                    <div class="content">我是中国人民的儿子，我深情地爱着我的祖国和人民。</div>
+                    <div class="author">—— 邓小平</div>
+                    <div class="tags">
+                        <span>励志名言</span>
+                        <span>党的教导</span>
+                    </div>
+                    <div class="time">2025-10-05</div>
+                    <div class="btn-group">
+                        <button class="btn-edit">编辑</button>
+                        <button class="btn-delete">删除</button>
+                    </div>
+                </div>
+                <div class="quote-item">
+                    <div class="content">为有牺牲多壮志，敢教日月换新天。</div>
+                    <div class="author">—— 毛泽东《七律·到韶山》</div>
+                    <div class="tags">
+                        <span>革命精神</span>
+                        <span>红色精神</span>
+                    </div>
+                    <div class="time">2025-10-10</div>
+                    <div class="btn-group">
+                        <button class="btn-edit">编辑</button>
+                        <button class="btn-delete">删除</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部 -->
+    <div class="footer">
+        <p>&copy;版权所有 24国一冯楚萱 2414126020</p>
+    </div>
+
+    <!-- JavaScript逻辑 -->
+    <script>
+        	//轮播图
+        	//1.jquery实现图片反转
+        	let imgs=["img/国徽.png","img/天安门.png"];
+        	let currentIndex=0;//当前图片索引
+        	$("#left").click(function(){
+        		currentIndex--;
+        		if(currentIndex<0) currentIndex=imgs.length-1;
+        			$("#bb").attr("src",imgs[currentIndex]);
+        		});
+        		
+        	
+        	$("#right").click(function(){
+        		currentIndex++;
+        		if(currentIndex>=imgs.length) currentIndex=0;
+        			$("#bb").attr("src",imgs[currentIndex]);
+        		});
+        	
+        	//2.定时器轮播
+        	let	timer;//存储定时器id set
+        	function autoPlayHandler(){
+        		currentIndex++;
+        		if(currentIndex>=imgs.length) currentIndex=0;
+        			$("#bb").attr("src",imgs[currentIndex]);
+        	};
+        	function autoPlay(){
+        		timer=setInterval(autoPlayHandler,3000);
+        	};
+        		
+        	//鼠标悬停 清除定时器
+        	function pasue(){
+        		clearInterval(timer);
+        	}
+        	//鼠标离开 启动定时器
+        	function resume(){
+        		autoPlay();
+        	}
+        	function Init(){
+        		autoPlay();
+        		//鼠标悬停 绑定时间
+        		$("#left").hover(pasue,resume);
+        		$("#right").hover(pasue,resume);
+        		
+        	}
+        	//加载jquery
+        	$(Init);
+
+        // 语录数据（模拟）
+        let quoteData = [
+            {
+                id: 1,
+                content: "我们中华民族有同自己的敌人血战到底的气概，有在自力更生的基础上光复旧物的决心，有自立于世界民族之林的能力！",
+                author: "毛泽东",
+                tag: "革命精神",
+                time: "2025-10-01"
+            },
+            {
+                id: 2,
+                content: "我是中国人民的儿子，我深情地爱着我的祖国和人民。",
+                author: "邓小平",
+                tag: "励志名言,党的教导",
+                time: "2025-10-05"
+            },
+            {
+                id: 3,
+                content: "为有牺牲多壮志，敢教日月换新天。",
+                author: "毛泽东《七律·到韶山》",
+                tag: "革命精神,红色精神",
+                time: "2025-10-10"
+            }
+        ];
+
+        // 渲染语录列表
+        function renderQuoteList() {
+            const quoteList = $('#quoteList');
+            quoteList.empty(); // 清空现有内容
+            quoteData.forEach(quote => {
+                const tagsHtml = quote.tag.split(',').map(tag => `<span>${tag}</span>`).join('');
+                const quoteItem = $(`
+                    <div class="quote-item" data-id="${quote.id}">
+                        <div class="content">${quote.content}</div>
+                        <div class="author">—— ${quote.author}</div>
+                        <div class="tags">${tagsHtml}</div>
+                        <div class="time">${quote.time}</div>
+                        <div class="btn-group">
+                            <button class="btn-edit">编辑</button>
+                            <button class="btn-delete">删除</button>
+                        </div>
+                    </div>
+                `);
+                quoteList.append(quoteItem);
+            });
+        }
+
+        // 添加语录
+        $('#addQuoteBtn').click(function() {
+            const content = $('#quoteContent').val().trim();
+            const author = $('#quoteAuthor').val().trim();
+            const tag = $('#quoteTag').val();
+            const time = new Date().toISOString().slice(0, 10); // 格式：YYYY-MM-DD
+
+            if (!content) {
+                alert("请输入语录内容！");
+                return;
+            }
+
+            // 新增语录数据
+            quoteData.push({
+                id: quoteData.length + 1,
+                content: content,
+                author: author,
+                tag: tag,
+                time: time
+            });
+
+            // 重置表单 + 重新渲染列表
+            $('#quoteForm')[0].reset();
+            renderQuoteList();
+            alert("语录添加成功！");
+        });
+
+        // 编辑/删除语录（事件委托）
+        $('#quoteList').on('click', '.btn-edit, .btn-delete', function() {
+            const quoteItem = $(this).closest('.quote-item');
+            const quoteId = parseInt(quoteItem.data('id'));
+            const index = quoteData.findIndex(item => item.id === quoteId);
+
+            if ($(this).hasClass('btn-edit')) {
+                // 编辑语录
+                const quote = quoteData[index];
+                $('#quoteContent').val(quote.content);
+                $('#quoteAuthor').val(quote.author);
+                $('#quoteTag').val(quote.tag.split(',')[0]); // 取第一个标签
+                // 替换为“更新语录”按钮
+                $('#addQuoteBtn').text('更新语录').off('click').click(function() {
+                    const newContent = $('#quoteContent').val().trim();
+                    const newAuthor = $('#quoteAuthor').val().trim();
+                    const newTag = $('#quoteTag').val();
+
+                    if (!newContent) {
+                        alert("请输入语录内容！");
+                        return;
+                    }
+
+                    // 更新数据
+                    quoteData[index] = {
+                        ...quote,
+                        content: newContent,
+                        author: newAuthor,
+                        tag: newTag
+                    };
+                    // 重置表单 + 重新渲染 + 恢复按钮
+                    $('#quoteForm')[0].reset();
+                    renderQuoteList();
+                    alert("语录更新成功！");
+                    $('#addQuoteBtn').text('添加语录').off('click').click(function() {
+                        // 恢复“添加语录”逻辑（需重新绑定）
+                        $('#addQuoteBtn').off('click');
+                        $('#addQuoteBtn').click(function() {
+                            const content = $('#quoteContent').val().trim();
+                            const author = $('#quoteAuthor').val().trim();
+                            const tag = $('#quoteTag').val();
+                            const time = new Date().toISOString().slice(0, 10);
+
+                            if (!content) {
+                                alert("请输入语录内容！");
+                                return;
+                            }
+
+                            quoteData.push({
+                                id: quoteData.length + 1,
+                                content: content,
+                                author: author,
+                                tag: tag,
+                                time: time
+                            });
+
+                            $('#quoteForm')[0].reset();
+                            renderQuoteList();
+                            alert("语录添加成功！");
+                        });
+                    });
+                });
+            } else if ($(this).hasClass('btn-delete')) {
+                // 删除语录
+                if (confirm("确定要删除这条语录吗？")) {
+                    quoteData.splice(index, 1);
+                    renderQuoteList();
+                    alert("语录删除成功！");
+                }
+            }
+        });
+    </script>
+</body>
+</html>
